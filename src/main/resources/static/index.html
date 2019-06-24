@@ -1,0 +1,68 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Ip2Country</title>
+  <style type="text/css">body {text-align:center;} input {margin:5px;} input[type=submit],input[type=button] {margin-top:15px;}</style>
+</head>
+<body>
+  <h2>Ip2Country</h2>
+  <form action="/api/v1/traceip" method="post">
+    <div>
+      <input type="text" name="ip" placeholder="ip" maxlength="15" required />
+    </div>
+    <input type="submit" id="submitButton" value="Submit" />
+    <input type="button" id="bulkButton" value="Bulk" onclick="bulk.exec()" />
+  </form>
+  <div id="time"></div>
+  <div id="info"></div>
+  <script type="text/javascript">
+  function Bulk() {
+	this.startTime = null;  
+	this.all = Array(256);
+	
+	this.ip = document.querySelector('input[name="ip"]');
+	this.time = document.querySelector('#time'); 
+	this.info = document.querySelector('#info');
+    this.button = document.querySelector('#bulkButton');
+  }
+  Bulk.prototype.exec = function() {
+	this.startTime = new Date();
+	 
+    this.button.value = 'Processing';
+    this.button.disabled = 'disabled';	  
+
+	let suffix = this.ip.value.substring(0, this.ip.value.lastIndexOf('.'));
+
+	this.all.fill(false);
+	for (let pos=0; pos<this.all.length; pos++) {
+	  this.send(pos, suffix+'.'+pos);
+	}
+  }
+  Bulk.prototype.send = function(pos, ip) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/v1/traceip?ip='+ip);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        let p = document.createElement("p");
+        p.textContent = xhr.responseText;
+        
+        bulk.info.appendChild(p);
+        
+        bulk.all[pos] = true;
+        bulk.check();
+      }
+    };    
+    xhr.send();
+  }
+  Bulk.prototype.check = function() {
+    if (this.all.reduce((r1, r2) => r1 && r2, true)) {
+      this.time.textContent = 'Time elapsed: ' + Math.round((new Date() - this.startTime) / 1000) + ' seconds';
+      
+      this.button.value = 'Bulk';
+      this.button.disabled = '';
+    }
+  }
+  var bulk = new Bulk();
+  </script>
+</body>
+</html>
