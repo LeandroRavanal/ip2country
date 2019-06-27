@@ -1,6 +1,7 @@
 package io.github.lr.ip2country.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Entidad de Moneda.
@@ -20,6 +21,21 @@ public class Currency implements Serializable {
 		this.name = name;
 		this.code = code;
 	}
+	
+	@Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Currency)) {
+            return false;
+        }
+        Currency c = (Currency) o;
+        return code == c.code;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code);
+    }
 	
 	public String getName() {
 		return name;

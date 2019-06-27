@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +28,12 @@ public class Ip2CountryService {
 
 	@Value("${ip2country.url}") private String url;
 	
+	@Autowired RestTemplate restTemplate;
+	
 	@Logging
 	public Ip2Country consume(String ip) {
 		logger.debug("Searching Ip2Country: {}", ip);
 		
-	    RestTemplate restTemplate = new RestTemplate();
-	    
 	    ResponseEntity<Ip2Country> response = restTemplate.exchange(MessageFormat.format(url, ip), HttpMethod.GET, null, Ip2Country.class);
 	    
 	    UtilsHelper.checkStatusResponse(response, "Ip2Country");

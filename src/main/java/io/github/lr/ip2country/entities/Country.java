@@ -3,6 +3,7 @@ package io.github.lr.ip2country.entities;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -23,6 +24,7 @@ public class Country implements Serializable {
 
 	public static final String CODE_AR = "AR";
 
+	private static final String NONE = "NONE";
 	private static final String COMMA = ",";
 	
 	private String name;
@@ -55,7 +57,22 @@ public class Country implements Serializable {
 	public Country(String name, String code, Map<String, String> languages, List<Currency> currencies, List<String> timezones) {
 		this(name, code, languages, currencies, timezones, 0, 0, true);
 	}
+	
+	@Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Country)) {
+            return false;
+        }
+        Country c = (Country) o;
+        return code == c.code;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(code);
+    }
+	
 	public String getName() {
 		return name;
 	}
@@ -94,7 +111,7 @@ public class Country implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("Country [name=%s  code=%s  languages=%s  currencies=%s  timezones=%s  latlng=%.2f-%.2f  skipDistance=%b  distance=%d  count=%d]", getName(), getCode(), getLanguages().keySet().stream().map(key -> String.format("%s=%s", key, getLanguages().get(key))).collect(Collectors.joining(COMMA)), getCurrencies().stream().map(currency -> currency.getCode()).collect(Collectors.joining(COMMA)), String.join(COMMA, getTimezones()), getLatitude(), getLongitude(), isSkipDistance(), getDistance(), getCount());
+		return String.format("Country [name=%s  code=%s  languages=%s  currencies=%s  timezones=%s  latlng=%.2f-%.2f  skipDistance=%b  distance=%d  count=%d]", getName(), getCode(), getLanguages() != null ? getLanguages().keySet().stream().map(key -> String.format("%s=%s", key, getLanguages().get(key))).collect(Collectors.joining(COMMA)) : NONE, getCurrencies() != null ? getCurrencies().stream().map(currency -> currency.getCode()).collect(Collectors.joining(COMMA)) : NONE, getTimezones() != null ? String.join(COMMA, getTimezones()) : NONE, getLatitude(), getLongitude(), isSkipDistance(), getDistance(), getCount());
 	}
 	
 }

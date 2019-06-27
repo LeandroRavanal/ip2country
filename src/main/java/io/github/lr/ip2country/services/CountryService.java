@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -44,6 +45,8 @@ public class CountryService {
 	@Value("${country.url.regions}") private String urlRegions;
 	
 	@Value("${processors.quantity:5}") private int processorsQuantity;
+	
+	@Autowired RestTemplate restTemplate;
 	
 	@SuppressWarnings("unchecked")
 	@RetryPolicy
@@ -93,8 +96,6 @@ public class CountryService {
 	private List<Country> findCountries(String url, String region) {
 		logger.debug("Searching Countries ({})", region);
 		
-	    RestTemplate restTemplate = new RestTemplate();
-	    
 	    ResponseEntity<List<Country>> response = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Country>>(){});
 	    
 	    UtilsHelper.checkStatusResponse(response, "Countries");

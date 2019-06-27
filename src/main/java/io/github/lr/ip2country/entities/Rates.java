@@ -17,6 +17,7 @@ import io.github.lr.ip2country.deserializers.RatesDeserializer;
 @JsonDeserialize(using = RatesDeserializer.class)
 public class Rates {
 	
+	private static final String NONE = "NONE";
 	private static final String COMMA = ",";
 	
 	private String date;
@@ -30,7 +31,7 @@ public class Rates {
 		this.base = base;
 		this.rates = rates;
 	}
-
+	
 	public String getDate() {
 		return date;
 	}
@@ -46,7 +47,7 @@ public class Rates {
 	
 	@Override
 	public String toString() {
-		return String.format("Rates [date=%s  instant=%s  base=%s  rates=%s]", getDate(), getInstant(), getBase(), getRates().keySet().stream().map(key -> String.format("%s=%.4f", key, getRates().get(key))).collect(Collectors.joining(COMMA)));
+		return String.format("Rates [date=%s  instant=%s  base=%s  rates=%s]", getDate(), getInstant(), getBase(), getRates() != null ? getRates().keySet().stream().map(key -> String.format("%s=%.4f", key, getRates().get(key))).collect(Collectors.joining(COMMA)) : NONE);
 	}
 	
 }

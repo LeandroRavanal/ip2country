@@ -2,6 +2,7 @@ package io.github.lr.ip2country.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +26,12 @@ public class CurrencyService {
 	
 	@Value("${currency.url}") private String url;
 	
+	@Autowired RestTemplate restTemplate;
+	
 	@RetryPolicy
 	public Rates findAllRates() {
 	    logger.debug("Searching Rates");
 		
-		RestTemplate restTemplate = new RestTemplate();
-	    
 	    ResponseEntity<Rates> response = restTemplate.exchange(url, HttpMethod.GET, null, Rates.class);
 	    
 	    UtilsHelper.checkStatusResponse(response, "Rates");
