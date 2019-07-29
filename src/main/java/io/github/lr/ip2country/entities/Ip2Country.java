@@ -30,12 +30,12 @@ public class Ip2Country {
             return false;
         }
         Ip2Country c = (Ip2Country) o;
-        return code == c.code;
+        return code != null && code.equals(c.code);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(code);
+        return Objects.hashCode(code);
     }
 
 	public String getName() {

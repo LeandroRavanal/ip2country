@@ -65,12 +65,12 @@ public class Country implements Serializable {
             return false;
         }
         Country c = (Country) o;
-        return code == c.code;
+        return code != null && code.equals(c.code);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(code);
+        return Objects.hashCode(code);
     }
 	
 	public String getName() {
