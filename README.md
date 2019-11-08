@@ -35,7 +35,7 @@ Resumen estadístico.
 ## Instalación / Ejecución
 
 ```
-mvn clean package && docker run -p 8080:8080 -t lr/ip2country
+mvn clean package
 
 docker network create lr-network
 
@@ -52,8 +52,8 @@ docker run --name app5 --network lr-network -p 8084:8080 -e redis.hostname=redis
 ## Funcionamiento
 
 Cuando la aplicación está levantando se obtienen los paises y las cotizaciones. Se calcula la distancia a Argentina para cada país y se actualiza la cotización de las monedas.
-Periodicamente se consultan las cotizaciones y se actualizan los valores.
-Enviando un POST a /api/v1/traceip con la IP, se obtiene el pais de esa IP y se adjunta a los otros datos previamente almacenados en memoria.
+Períodicamente se consultan las cotizaciones y se actualizan los valores.
+Enviando un POST a /api/v1/traceip con la IP, se obtiene el país de esa IP y se adjunta a los otros datos previamente almacenados en memoria.
 Se puede acceder a un resumen de información a traves de GET /api/v1/summary.
 
 NOTA: Completar "currency.api.key" en "application.properties" con la key de "https://fixer.io/"
